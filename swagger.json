@@ -1,0 +1,129 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "NFT Minting API",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/api/nft": {
+        "post": {
+          "summary": "Store NFT data",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "imageUrl": { "type": "string" },
+                    "tokenId": { "type": "integer" },
+                    "walletAddress": { "type": "string" }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "imageUrl",
+                    "tokenId",
+                    "walletAddress"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "NFT created successfully"
+            },
+            "400": {
+              "description": "Bad request (e.g., invalid input, duplicate tokenId)"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/nft/{tokenId}": {
+        "get": {
+          "summary": "Get NFT data by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "tokenId",
+              "schema": {
+                "type": "integer"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "NFT data retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NFT"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "NFT not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/gallery/{walletAddress}": {
+        "get": {
+          "summary": "Get NFT gallery",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "walletAddress",
+              "schema": {
+                "type": "string"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "NFT gallery retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NFT"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    "components": {  
+      "schemas": {
+        "NFT": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "imageUrl": { "type": "string" },
+            "Id": { "type": "integer" },
+            "walletAddress": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
